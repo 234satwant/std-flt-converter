@@ -7,7 +7,6 @@ using namespace std;
 extern "C" int yylex();
 extern "C" int yyparse (void);
 extern "C" FILE *yyin;
-extern int line_num;
 
 void yyerror(const char *s1);
 #define YYDEBUG 1
@@ -18,16 +17,14 @@ void yyerror(const char *s1);
  It is particularly used when we need to used more than one type
  */
 %union{
-	float f;
-	char *c;
+	float  f;
 }
 
 /**
  Token declaration with appropriate type
  */
-%token <c> JC MI
 %token <f> DIGIT
-%token ENDL EXTRA
+%token FINISH SC JC MI SEMICOLON
 
 %%
 
@@ -36,15 +33,26 @@ void yyerror(const char *s1);
  */
 
 converter:
-	jc
-	| mi;
+        jc converter  {cout<<" jcconv\n ";}
+        | mi converter {cout<<" mifinish\n ";}
+        |jc FINISH      {cout<<" jcfinish \n";}
+        | mi FINISH     {cout<<" mifinish \n";}
+        ;
 jc:
-	JC digit ENDL { cout << "	JC	"  << $1 << endl; };
+        JC coord {cout<<" JCcoord\n";}
+        ;
 mi:
-	MI digit ENDL { cout << "	MI      "  << $1 << endl; };
+        MI coord {cout<<" MIcoord\n";}
+        ;
+coord:
+	digit SEMICOLON	{cout<<"DigitSC\n";}
+	|digit SEMICOLON coord	{cout<<"DigitSCcoord\n";}
+	;
 digit:
-	digit DIGIT
-	| DIGIT EXTRA;
+        DIGIT digit {cout<<" digit "<<$1<<"\n";}
+        | {cout<<" empty ";}
+        ;
+
 
 %%
 
@@ -87,6 +95,6 @@ int main(int argc, char **argv)	// Definition of main function
 }
 void yyerror(const char *s1)	// Definition of function handling error
 {
-	cout << "Parser error! Message: " << s1 << " on line " << line_num << endl;
+	cout << "Parser error! Message: " << s1 << endl;
 	exit(-1);
 }
