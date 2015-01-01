@@ -10,19 +10,22 @@ using namespace std;
 
 digits  [0-9]+
 integer {digits}
-float	({digits}.{digits})
 s	[ \t\n\r]+
 jc	(JOINT{s}COORDINATES{s})
 mi	(MEMBER{s}INCIDENCES{s})
 semicolon	[;]
 finish 		(FINISH)
+month		[A-Za-z]+
+date		({digits}-{month}-{digits})
+width		(WIDTH{s}{digits})
 %%
 
 {integer}        {yylval.f = atof(yytext);return DIGIT;}
-{float}		{yylval.f = atof(yytext);return DIGIT;}
 {s}		
 {jc}		{return JC; }
 {mi}		{return MI; }
 {semicolon}	{return SEMICOLON;}
 {finish}	{return FINISH;}
+{width}		
+{date}
 .		;
