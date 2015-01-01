@@ -58,25 +58,6 @@ digit:
 
 int main(int argc, char **argv)	// Definition of main function
 {
-	/*int c;
-	string arg, out_file;
-	if(argc > 1)
-	{
-		if(!(yyin = fopen(argv[2], "r")))	// open the first argument file and put it in yyin FILE variable 
-		{
-			perror(argv[1]);
-			return (1);
-		}
-
-		arg = argv [1];
-		if( arg.compare("flt") == 0 )
-		c = 1;
-			else if( arg.compare("std") == 0 )
-		c = 2;
-
-		out_file = argv[3];
-	}*/
-
         // open a file handle to a particular file:
         FILE *myfile = fopen("beam.std", "r");
         // make sure it's valid:
